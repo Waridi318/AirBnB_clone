@@ -10,19 +10,30 @@ from datetime import datetime
 class BaseModel:
     """Base class for the AirBnB project."""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Initialize attributes of an instance:
             random uuid, dates created/updated.
         """
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
+        if kwargs:
+            for k, v in kwargs.items():
+                if k != '__class__':
+                    setattr(self, k, v)
+            self.created_at = datetime.strptime(
+                kwargs['created_at'], "%Y-%m-%dT%H:%M:%S.%f"
+            )
+            self.updated_at = datetime.strptime(
+                 kwargs['updated_at'], "%Y-%m-%dT%H:%M:%S.%f"
+            )
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = self.created_at
 
     def __str__(self):
         """Return the string info about model."""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
-    
+
     def save(self):
         """Update instance with updated time."""
         self.updated_at = datetime.now()
