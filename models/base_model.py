@@ -5,7 +5,7 @@ Base class of all the classes in the project.
 """
 from uuid import uuid4
 from datetime import datetime
-from models import storage
+import models
 
 
 class BaseModel:
@@ -30,7 +30,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """Return the string info about model."""
@@ -39,7 +39,7 @@ class BaseModel:
     def save(self):
         """Update instance with updated time."""
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """Returns the __dict__ of the instance."""
