@@ -18,14 +18,20 @@ class BaseModel:
         """
         if kwargs:
             for k, v in kwargs.items():
-                if k != '__class__':
+                if k == 'created_at':
+                    setattr(
+                        self,
+                        k,
+                        datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                    )
+                elif k == 'updated_at':
+                    setattr(
+                        self,
+                        k,
+                        datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                    )
+                elif k != '__class__':
                     setattr(self, k, v)
-            self.created_at = datetime.strptime(
-                kwargs['created_at'], "%Y-%m-%dT%H:%M:%S.%f"
-            )
-            self.updated_at = datetime.strptime(
-                 kwargs['updated_at'], "%Y-%m-%dT%H:%M:%S.%f"
-            )
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
